@@ -1252,7 +1252,7 @@
       </div>
     </section>
 
-    <!-- ==================== เมนู โปรเจค (โหมดอ่านอย่างเดียว + ข้อมูลฝังในโค้ด) ==================== -->
+    <!-- ==================== เมนู โปรเจค (โหมดอ่านอย่างเดียว + เว้นช่องกรอกในโค้ด) ==================== -->
     <section class="tab-panel" id="panelProject">
       <div class="content-grid">
         <div class="side-panel">
@@ -1323,40 +1323,49 @@
 
   <script>
     /* =========================================================================
-       📌 ฝังข้อมูลโปรเจคในโค้ดโดยตรง (แก้ตรงนี้แล้ว Push ขึ้น GitHub ได้เลย)
-       - dates: เลือกได้ 1 วันหรือหลายวันจาก ["3 ธันวาคม 2026", "5 ธันวาคม 2026", "6 ธันวาคม 2026"]
-       - xHandle: ใส่ "@ชื่อแอคเคาท์" หรือเว้นว่าง ""
-       - images: ใส่ลิงก์รูปภาพ ["https://.../img1.jpg", "./images/proj1.jpg"]
+       📌 ช่องกรอกข้อมูลโปรเจค (ก๊อปปี้ { ... } ซ้ำได้ไม่จำกัดจำนวนโปรเจค)
+       - id: ตัวเลขไม่ซ้ำกัน เช่น 1, 2, 3, 4 ...
+       - dates: เลือกวันได้ตั้งแต่ 1 ถึง 3 วัน เช่น:
+           วันเดียว: ["3 ธันวาคม 2026"]
+           หลายวัน: ["3 ธันวาคม 2026", "5 ธันวาคม 2026", "6 ธันวาคม 2026"]
+       - name: ชื่อโปรเจค
+       - location: สถานที่จัดโปรเจค
+       - xHandle: แอคเคาท์ใน X เช่น "@ชื่อแอค" (ถ้าไม่ระบุให้ใส่ "")
+       - images: รายชื่อไฟล์/ลิงก์รูป (ใส่กี่รูปก็ได้ เช่น ["./images/p1-1.jpg", "./images/p1-2.jpg"])
        - note: รายละเอียดโปรเจค (ขึ้นบรรทัดใหม่ได้ด้วย \n)
        ========================================================================= */
     const EMBEDDED_PROJECTS = [
       {
-        id: 301,
-        dates: ["3 ธันวาคม 2026"],
-        name: "โปรเจควันที่ 3 ธันวาคม 2026",
-        location: "ระบุสถานที่",
-        xHandle: "",
-        images: [],
-        note: "รอเพิ่มเติมรายละเอียด"
+        id: 1,
+        dates: ["3 ธันวาคม 2026", "5 ธันวาคม 2026", "6 ธันวาคม 2026"],
+        name: "โปรเจคในคอนเสิร์ต BTS WORLD TOUR ARIRANG in Bangkok",
+        location: "ราชมังคลากีฬาสถาน",
+        xHandle: "@ARMYTH_project",
+        images: [
+          // "https://imgz.io/image/HWw-zT7bcAAtu3g.gKe9Ze",
+          // "https://imgz.io/image/HWw-ynJaMAAfnuZ.gKemau"
+        ],
+        note: ""
       },
       {
-        id: 302,
-        dates: ["5 ธันวาคม 2026"],
-        name: "โปรเจควันที่ 5 ธันวาคม 2026",
-        location: "ระบุสถานที่",
+        id: 2,
+        dates: [""],
+        name: "",
+        location: "",
         xHandle: "",
         images: [],
-        note: "รอเพิ่มเติมรายละเอียด"
+        note: ""
       },
       {
-        id: 303,
-        dates: ["6 ธันวาคม 2026"],
-        name: "โปรเจควันที่ 6 ธันวาคม 2026",
-        location: "ระบุสถานที่",
+        id: 3,
+        dates: [""],
+        name: "",
+        location: "",
         xHandle: "",
         images: [],
-        note: "รอเพิ่มเติมรายละเอียด"
+        note: ""
       }
+      // ก๊อปปี้บล็อก { id: ..., dates: [...], name: "", location: "", xHandle: "", images: [], note: "" } ต่อท้ายตรงนี้ได้เลย
     ];
 
     const STORAGE_KEY = "bts_arirang_checklist_v3";
@@ -1479,7 +1488,8 @@
 
     function getProjectDates(proj) {
       if (Array.isArray(proj.dates) && proj.dates.length > 0) {
-        return ALL_EVENT_DATES.filter(d => proj.dates.includes(d));
+        const matched = ALL_EVENT_DATES.filter(d => proj.dates.includes(d));
+        if (matched.length > 0) return matched;
       }
       if (proj.date && ALL_EVENT_DATES.includes(proj.date)) {
         return [proj.date];
@@ -1591,9 +1601,10 @@
       const total = proj.images.length;
       const idx = lightboxState.index;
       const daysSummary = getProjectDates(proj).map(d => SHORT_DATE_MAP[d]).join(", ");
+      const titleLabel = proj.name || "โปรเจค";
       document.getElementById("lightboxImg").src = proj.images[idx];
       document.getElementById("lightboxCaption").textContent =
-        `📅 ${daysSummary} · ${proj.name} (รูปที่ ${idx + 1} / ${total})`;
+        `📅 ${daysSummary} · ${titleLabel} (รูปที่ ${idx + 1} / ${total})`;
 
       const showNav = total > 1;
       document.getElementById("lightboxPrevBtn").style.display = showNav ? "flex" : "none";
@@ -1663,6 +1674,9 @@
       const { image, date, ...rest } = p;
       return {
         ...rest,
+        name: (p.name || "").trim(),
+        location: (p.location || "").trim(),
+        note: (p.note || "").trim(),
         dates: datesList,
         xHandle: displayXHandle(p.xHandle || ""),
         images: imgs
@@ -1671,7 +1685,9 @@
 
     function loadProjectsData() {
       const normalizedEmbedded = Array.isArray(EMBEDDED_PROJECTS)
-        ? EMBEDDED_PROJECTS.map(normalizeProjectData)
+        ? EMBEDDED_PROJECTS.map(normalizeProjectData).filter(p =>
+            p.name || p.location || p.xHandle || p.note || (p.images && p.images.length > 0)
+          )
         : [];
 
       if (normalizedEmbedded.length > 0) {
@@ -1691,7 +1707,7 @@
             return parsed.map(normalizeProjectData);
           }
         } catch {
-          // ใช้ค่าเริ่มต้น
+          // ใช้ค่าว่าง
         }
       }
       return [];
@@ -1898,8 +1914,13 @@
         </span>
       `).join("");
 
-      const locText = proj.location ? proj.location : "ยังไม่ได้ระบุสถานที่";
-      const xDisplay = displayXHandle(proj.xHandle) || "ยังไม่ได้ระบุแอคเคาท์ X";
+      const displayTitle = proj.name || "โปรเจค";
+      const locHtml = proj.location
+        ? `<div class="location-line"><span>📍</span><span>${escapeHtml(proj.location)}</span></div>`
+        : "";
+      const xHtml = proj.xHandle
+        ? `<div class="x-handle-line"><span class="x-badge">𝕏 ${escapeHtml(displayXHandle(proj.xHandle))}</span></div>`
+        : "";
       const noteHtml = proj.note ? `<div class="project-note">${escapeHtml(proj.note)}</div>` : "";
       const imgs = Array.isArray(proj.images) ? proj.images : [];
 
@@ -1908,7 +1929,7 @@
           <div class="project-gallery ${imgs.length === 1 ? "single" : ""}">
             ${imgs.map((src, idx) => `
               <div class="gallery-item" onclick="openLightbox(${proj.id}, ${idx})" title="คลิกเพื่อเปิดดูรูปใหญ่">
-                <img src="${src}" alt="${escapeHtml(proj.name)} รูปที่ ${idx + 1}" />
+                <img src="${src}" alt="${escapeHtml(displayTitle)} รูปที่ ${idx + 1}" />
                 <div class="gallery-item-overlay" data-html2canvas-ignore="true">
                   <button type="button" class="gallery-save-btn" onclick="downloadSingleImage(event, ${proj.id}, ${idx})">💾 บันทึก</button>
                 </div>
@@ -1924,15 +1945,10 @@
           <div class="per-day-countdowns">${dayChipsHtml}</div>
         </div>
         ${galleryHtml}
-        <div class="project-name">📁 ${escapeHtml(proj.name)}</div>
+        <div class="project-name">📁 ${escapeHtml(displayTitle)}</div>
         <div class="project-info-stack">
-          <div class="location-line">
-            <span>📍</span>
-            <span>${escapeHtml(locText)}</span>
-          </div>
-          <div class="x-handle-line">
-            <span class="x-badge">𝕏 ${escapeHtml(xDisplay)}</span>
-          </div>
+          ${locHtml}
+          ${xHtml}
         </div>
         ${noteHtml}
       `;
@@ -1966,7 +1982,7 @@
 
       feedEl.innerHTML = "";
       if (filtered.length === 0) {
-        feedEl.innerHTML = `<div class="empty-state">ไม่พบโปรเจคตามตัวกรองที่เลือก ลองเปลี่ยนวันหรือแอคเคาท์ดูนะ 📁</div>`;
+        feedEl.innerHTML = `<div class="empty-state">ยังไม่มีข้อมูลโปรเจคในโค้ดหรือตามตัวกรองนี้ ลองเติมข้อมูลใน EMBEDDED_PROJECTS ดูนะ 📁</div>`;
         return;
       }
 
