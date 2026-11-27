@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>รายการที่ต้องเอาไปคอนBTS · Arirang Hanbok Edition 🪭</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <style>
+    :root {
+      --bg-void: #070204;
+      --bg-card: rgba(21, 7, 11, 0.88);
+      --crimson-deep: #57050f;
+      --crimson: #c40e2b;
+      --crimson-bright: #ff2444;
+      --gold: #f5c973;
+      --text-main: #fff7f8;
+      --text-dim: #bc989f;
+      --border-glass: rgba(245, 201, 115, 0.30);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Prompt', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background-color: var(--bg-void);
+      color: var(--text-main);
+      padding: 18px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* พื้นหลังเคลื่อนไหวสไตล์ฮันบก & โคมไฟเกาหลี */
+    .hanbok-stage {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 15% 12%, rgba(255, 36, 68, 0.34) 0%, transparent 45%),
+        radial-gradient(circle at 85% 18%, rgba(245, 201, 115, 0.16) 0%, transparent 42%),
+        radial-gradient(circle at 50% 92%, rgba(120, 8, 24, 0.54) 0%, transparent 55%),
+        linear-gradient(160deg, #080204 0%, #1d050a 48%, #090204 100%);
+    }
+
+    .lantern-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(44px);
+      opacity: 0.45;
+      animation: orbFloat 12s ease-in-out infinite alternate;
+    }
+
+    .lantern-orb.o1 {
+      width: 280px;
+      height: 280px;
+      top: 6%;
+      left: -40px;
+      background: radial-gradient(circle, #ff2444, transparent 70%);
+    }
+
+    .lantern-orb.o2 {
+      width: 260px;
+      height: 260px;
+      top: 45%;
+      right: -50px;
+      background: radial-gradient(circle, #f5c973, transparent 72%);
+      animation-duration: 15s;
+    }
+
+    .lantern-orb.o3 {
+      width: 320px;
+      height: 320px;
+      bottom: 4%;
+      left: 22%;
+      background: radial-gradient(circle, #b50c27, transparent 70%);
+      animation-duration: 18s;
+    }
+
+    @keyframes orbFloat {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(28px, -30px, 0) scale(1.12); }
+    }
+
+    .silk-wave {
+      position: absolute;
+      width: 170%;
+      height: 250px;
+      left: -35%;
+      border-radius: 46%;
+      opacity: 0.48;
+      animation: silkSway 14s ease-in-out infinite;
+    }
+
+    .silk-wave.w1 {
+      top: 10%;
+      background: linear-gradient(90deg, transparent, rgba(255, 36, 68, 0.34), rgba(245, 201, 115, 0.24), transparent);
+    }
+
+    .silk-wave.w2 {
+      top: 44%;
+      background: linear-gradient(90deg, transparent, rgba(245, 201, 115, 0.2), rgba(196, 14, 43, 0.36), transparent);
+      animation-duration: 18s;
+      animation-direction: reverse;
+    }
+
+    .silk-wave.w3 {
+      top: 74%;
+      background: linear-gradient(90deg, transparent, rgba(138, 9, 28, 0.45), rgba(245, 201, 115, 0.16), transparent);
+      animation-duration: 21s;
+    }
+
+    @keyframes silkSway {
+      0%, 100% { transform: translateY(-20px) rotate(-3.5deg) scaleX(1); }
+      50% { transform: translateY(22px) rotate(3.5deg) scaleX(1.05); }
+    }
+
+    .petal {
+      position: absolute;
+      top: -24px;
+      border-radius: 100% 0 100% 25%;
+      background: linear-gradient(135deg, rgba(255, 77, 102, 0.85), rgba(245, 201, 115, 0.65));
+      box-shadow: 0 0 10px rgba(255, 36, 68, 0.4);
+      animation: petalDrift linear infinite;
+    }
+
+    .sparkle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #ffe7a8;
+      box-shadow: 0 0 10px #f5c973, 0 0 18px #ff2444;
+      animation: twinkle 3.6s ease-in-out infinite;
+    }
+
+    @keyframes petalDrift {
+      0% { transform: translate3d(0, -20px, 0) rotate(0deg); opacity: 0; }
+      12% { opacity: 0.9; }
+      88% { opacity: 0.85; }
+      100% { transform: translate3d(75px, 106vh, 0) rotate(340deg); opacity: 0; }
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.15; transform: scale(0.7); }
+      50% { opacity: 0.95; transform: scale(1.35); }
+    }
+
+    /* กล่องหลัก: มือถือเป็นแนวตั้ง คอมเป็นแนวนอนเต็มจอ */
+    .app-shell {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 540px;
+      min-height: calc(100vh - 36px);
+      margin: 0 auto;
+      background: var(--bg-card);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--border-glass);
+      border-radius: 26px;
+      padding: 24px 18px 20px;
+      box-shadow:
+        0 26px 64px rgba(0, 0, 0, 0.88),
+        0 0 42px rgba(196, 14, 43, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.10);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .goreum-ribbon {
+      position: absolute;
+      top: 0;
+      left: 24px;
+      width: 124px;
+      height: 6px;
+      background: linear-gradient(90deg, var(--gold), var(--crimson-bright), var(--gold));
+      border-bottom-left-radius: 99px;
+      border-bottom-right-radius: 99px;
+    }
+
+    .app-shell::after {
+      content: "";
+      position: absolute;
+      inset: 7px;
+      border-radius: 19px;
+      border: 1px solid rgba(245, 201, 115, 0.11);
+      pointer-events: none;
+    }
+
+    .fan-wrap {
+      position: absolute;
+      top: -16px;
+      right: -16px;
+      width: 156px;
+      height: 156px;
+      pointer-events: none;
+      z-index: 2;
+      filter: drop-shadow(0 8px 18px rgba(196, 14, 43, 0.48));
+      transform-origin: 115px 162px;
+      animation: gentleBreeze 5.2s ease-in-out infinite;
+    }
+
+    @keyframes gentleBreeze {
+      0%, 100% { transform: rotate(-11deg); }
+      50% { transform: rotate(-1deg); }
+    }
+
+    .content-grid {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex: 1;
+    }
+
+    .side-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .header {
+      padding-right: 96px;
+    }
+
+    .kr-sub {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 12px;
+      letter-spacing: 2.5px;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+
+    .tag-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      color: #ffe2e8;
+      background: linear-gradient(90deg, rgba(196, 14, 43, 0.78), rgba(87, 5, 15, 0.85));
+      border: 1px solid rgba(245, 201, 115, 0.45);
+      padding: 4px 11px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+    }
+
+    .dot-live {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 8px var(--gold);
+      animation: pulseDot 1.8s infinite;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.45; transform: scale(0.8); }
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.3;
+      color: #fff6d6;
+      text-shadow: 0 2px 10px rgba(255, 36, 68, 0.45);
+    }
+
+    .progress-card {
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(196, 14, 43, 0.12));
+      border: 1px solid rgba(245, 201, 115, 0.25);
+      border-radius: 18px;
+      padding: 14px 16px;
+    }
+
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .progress-label { color: var(--text-dim); }
+    .progress-stat { color: var(--gold); font-weight: 600; }
+
+    .track {
+      width: 100%;
+      height: 10px;
+      background: rgba(0, 0, 0, 0.58);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #8f081b, var(--crimson-bright), var(--gold));
+      box-shadow: 0 0 14px rgba(255, 36, 68, 0.7);
+      transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .ready-banner {
+      margin-top: 10px;
+      font-size: 12.5px;
+      color: var(--gold);
+      display: none;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+    }
+
+    .ready-banner.show { display: flex; }
+
+    .composer {
+      display: flex;
+      gap: 8px;
+    }
+
+    .composer input {
+      flex: 1;
+      background: rgba(8, 3, 5, 0.78);
+      border: 1px solid rgba(245, 201, 115, 0.32);
+      border-radius: 14px;
+      padding: 11px 14px;
+      color: var(--text-main);
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .composer input::placeholder { color: #947279; }
+    .composer input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(245, 201, 115, 0.16);
+    }
+
+    .btn-add {
+      background: linear-gradient(135deg, var(--crimson-bright), var(--crimson-deep));
+      color: #fff;
+      border: 1px solid rgba(245, 201, 115, 0.68);
+      border-radius: 14px;
+      padding: 0 16px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn-add:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(255, 36, 68, 0.48);
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filters {
+      display: flex;
+      background: rgba(0, 0, 0, 0.48);
+      padding: 3px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .filter-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn.active {
+      background: linear-gradient(135deg, var(--crimson), #7d0917);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .mini-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .icon-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(245, 201, 115, 0.26);
+      color: var(--gold);
+      font-size: 12px;
+      padding: 6px 11px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .icon-btn:hover { background: rgba(245, 201, 115, 0.16); }
+
+    .icon-btn.snap-btn {
+      background: linear-gradient(135deg, rgba(245, 201, 115, 0.24), rgba(196, 14, 43, 0.32));
+      border-color: var(--gold);
+      color: #fff4d8;
+      font-weight: 600;
+    }
+
+    .checklist {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 9px;
+      align-content: start;
+    }
+
+    .item-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 11px 13px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 36, 68, 0.3);
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+      user-select: none;
+    }
+
+    .item-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(245, 201, 115, 0.6);
+      background: rgba(196, 14, 43, 0.14);
+    }
+
+    .item-card.done {
+      background: rgba(10, 4, 6, 0.68);
+      border-color: rgba(245, 201, 115, 0.15);
+    }
+
+    .item-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .check-box {
+      width: 22px;
+      height: 22px;
+      border-radius: 7px;
+      border: 2px solid var(--crimson-bright);
+      background: rgba(0, 0, 0, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+
+    .item-card.done .check-box {
+      background: linear-gradient(135deg, var(--crimson-bright), var(--crimson-deep));
+      border-color: var(--gold);
+    }
+
+    .check-box svg {
+      width: 13px;
+      height: 13px;
+      stroke: var(--gold);
+      stroke-width: 3;
+      fill: none;
+      opacity: 0;
+      transform: scale(0.4);
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .item-card.done .check-box svg {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .item-emoji {
+      font-size: 17px;
+      flex-shrink: 0;
+      transition: transform 0.25s ease;
+    }
+
+    .item-card:hover .item-emoji { transform: scale(1.18) rotate(-6deg); }
+
+    .item-title {
+      font-size: 14px;
+      color: var(--text-main);
+      word-break: break-word;
+    }
+
+    .item-card.done .item-title {
+      text-decoration: line-through;
+      color: var(--text-dim);
+    }
+
+    .item-right {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+
+    .badge-status {
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 4px 9px;
+      border-radius: 999px;
+    }
+
+    .item-card:not(.done) .badge-status {
+      background: rgba(255, 36, 68, 0.18);
+      color: #ff8c9b;
+      border: 1px solid rgba(255, 36, 68, 0.36);
+    }
+
+    .item-card.done .badge-status {
+      background: rgba(245, 201, 115, 0.17);
+      color: var(--gold);
+      border: 1px solid rgba(245, 201, 115, 0.44);
+    }
+
+    .del-btn {
+      background: transparent;
+      border: none;
+      color: #8b6870;
+      font-size: 13px;
+      padding: 4px 6px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .del-btn:hover {
+      color: #ff4d64;
+      background: rgba(255, 36, 68, 0.16);
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 36px 16px;
+      color: var(--text-dim);
+      font-size: 13.5px;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(28, 10, 14, 0.96);
+      border: 1px solid var(--gold);
+      color: var(--text-main);
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.28s ease;
+      z-index: 99;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.65);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .footer-wave {
+      position: relative;
+      z-index: 2;
+      margin-top: 16px;
+      opacity: 0.65;
+    }
+
+    /* โหมดแนวนอนเต็มหน้าจอสำหรับหน้าจอคอมพิวเตอร์ */
+    @media (min-width: 900px) {
+      body {
+        padding: 24px 28px;
+      }
+
+      .app-shell {
+        max-width: 100%;
+        padding: 30px 32px 24px;
+      }
+
+      .content-grid {
+        display: grid;
+        grid-template-columns: 360px 1fr;
+        gap: 28px;
+        align-items: start;
+      }
+
+      .side-panel {
+        position: sticky;
+        top: 24px;
+        gap: 16px;
+      }
+
+      h1 {
+        font-size: 25px;
+      }
+
+      .checklist {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 11px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="hanbok-stage" id="hanbokStage" aria-hidden="true">
+    <div class="lantern-orb o1"></div>
+    <div class="lantern-orb o2"></div>
+    <div class="lantern-orb o3"></div>
+    <div class="silk-wave w1"></div>
+    <div class="silk-wave w2"></div>
+    <div class="silk-wave w3"></div>
+  </div>
+
+  <main class="app-shell" id="captureTarget">
+    <div class="goreum-ribbon"></div>
+
+    <!-- พัดจีนมุมบนขวา -->
+    <svg class="fan-wrap" viewBox="0 0 220 220" aria-hidden="true">
+      <defs>
+        <linearGradient id="silkRed" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#ff2b47"/>
+          <stop offset="55%" stop-color="#b80d28"/>
+          <stop offset="100%" stop-color="#47040c"/>
+        </linearGradient>
+      </defs>
+      <line x1="115" y1="162" x2="115" y2="196" stroke="#f5c973" stroke-width="2.5"/>
+      <circle cx="115" cy="198" r="4.5" fill="#f5c973"/>
+      <path d="M 115 162 L 24 84 A 122 122 0 0 1 202 80 Z" fill="url(#silkRed)" stroke="#f5c973" stroke-width="2.5"/>
+      <g stroke="#f5c973" stroke-width="1.2" opacity="0.82">
+        <line x1="115" y1="162" x2="45" y2="66"/>
+        <line x1="115" y1="162" x2="72" y2="50"/>
+        <line x1="115" y1="162" x2="102" y2="42"/>
+        <line x1="115" y1="162" x2="132" y2="42"/>
+        <line x1="115" y1="162" x2="160" y2="50"/>
+        <line x1="115" y1="162" x2="185" y2="66"/>
+      </g>
+      <circle cx="115" cy="86" r="6" fill="#f5c973"/>
+      <circle cx="84" cy="96" r="4" fill="#f5c973" opacity="0.85"/>
+      <circle cx="146" cy="96" r="4" fill="#f5c973" opacity="0.85"/>
+      <circle cx="115" cy="162" r="7" fill="#f5c973" stroke="#57050f" stroke-width="2"/>
+    </svg>
+
+    <div class="content-grid">
+      <div class="side-panel">
+        <header class="header">
+          <div class="kr-sub">한복 · 아리랑 · BTS CONCERT</div>
+          <div class="tag-pill">
+            <span class="dot-live"></span>
+            <span>ARIRANG PACKING LIST</span>
+          </div>
+          <h1 id="boardTitle">รายการที่ต้องเอาไปคอนBTS</h1>
+        </header>
+
+        <section class="progress-card">
+          <div class="progress-top">
+            <span class="progress-label">✨ ความพร้อมก่อนไปเจอหนุ่มๆ</span>
+            <span class="progress-stat" id="progressStat">0 / 23 (0%)</span>
+          </div>
+          <div class="track">
+            <div class="fill" id="progressFill"></div>
+          </div>
+          <div class="ready-banner" id="readyBanner">
+            <span>🪭💜</span>
+            <span>ครบ 100% แล้ว! พร้อมไปสนุกหน้าคอน BTS แบบปังๆ</span>
+          </div>
+        </section>
+
+        <div class="composer" data-html2canvas-ignore="true">
+          <input type="text" id="itemInput" placeholder="เพิ่มของที่ต้องเอาไปคอนเพิ่ม..." onkeydown="if(event.key==='Enter') addItem()" />
+          <button class="btn-add" onclick="addItem()">+ เพิ่ม</button>
+        </div>
+
+        <div class="toolbar" data-html2canvas-ignore="true">
+          <div class="filters">
+            <button class="filter-btn active" data-filter="all" onclick="setFilter('all', this)">ทั้งหมด</button>
+            <button class="filter-btn" data-filter="pending" onclick="setFilter('pending', this)">ยังไม่เอาไป</button>
+            <button class="filter-btn" data-filter="done" onclick="setFilter('done', this)">เอาไปแล้ว</button>
+          </div>
+          <div class="mini-actions">
+            <button class="icon-btn snap-btn" onclick="saveAsImage()" title="บันทึกลิสต์เป็นรูปภาพ">📸 บันทึกรูป</button>
+            <button class="icon-btn" onclick="copyList()" title="คัดลอกลิสต์">📋 คัดลอก</button>
+            <button class="icon-btn" onclick="resetToSheetDefault()" title="คืนค่ารายการเริ่มต้นจากชีต">🔄 รีเซ็ต</button>
+          </div>
+        </div>
+      </div>
+
+      <ul class="checklist" id="checklist"></ul>
+    </div>
+
+    <svg class="footer-wave" viewBox="0 0 800 24" width="100%" height="24" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 10 Q 25 0, 50 10 T 100 10 T 150 10 T 200 10 T 250 10 T 300 10 T 350 10 T 400 10 T 450 10 T 500 10 T 550 10 T 600 10 T 650 10 T 700 10 T 750 10 T 800 10" fill="none" stroke="#f5c973" stroke-width="1.6"/>
+      <path d="M0 17 Q 25 7, 50 17 T 100 17 T 150 17 T 200 17 T 250 17 T 300 17 T 350 17 T 400 17 T 450 17 T 500 17 T 550 17 T 600 17 T 650 17 T 700 17 T 750 17 T 800 17" fill="none" stroke="#ff2444" stroke-width="1.6"/>
+    </svg>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const STORAGE_KEY = "bts_arirang_checklist_v3";
+    const SHEET_TITLE = "รายการที่ต้องเอาไปคอนBTS";
+    const SHEET_ITEMS = [
+      { id: 1,  emoji: "🎫", name: "บัตรคอนเสิร์ต", done: false },
+      { id: 2,  emoji: "🪪", name: "บัตรประชาชน/Passsport", done: false },
+      { id: 3,  emoji: "💳", name: "เงินสด บัตรเครดิต/เดบิต", done: false },
+      { id: 4,  emoji: "🌀", name: "พัดลม", done: false },
+      { id: 5,  emoji: "🔌", name: "แบตสำรอง", done: false },
+      { id: 6,  emoji: "🧻", name: "ทิชชูเปียก/ทิชชู", done: false },
+      { id: 7,  emoji: "👗", name: "ชุดไปคอนวันที่5", done: false },
+      { id: 8,  emoji: "👚", name: "ชุดไปคอนวันที่6", done: false },
+      { id: 9,  emoji: "🔋", name: "ถ่านแท่งไฟ", done: false },
+      { id: 10, emoji: "💜", name: "แท่งไฟ", done: false },
+      { id: 11, emoji: "🌿", name: "ยาดม ลูกอม หรือสเปรย์แก้เจ็บคอ", done: false },
+      { id: 12, emoji: "🍬", name: "ลูกอม", done: false },
+      { id: 13, emoji: "🗣️", name: "สเปรย์แก้เจ็บคอ", done: false },
+      { id: 14, emoji: "🩹", name: "พลาสเตอร์ปิดแผล", done: false },
+      { id: 15, emoji: "💊", name: "ยาประจำตัว", done: false },
+      { id: 16, emoji: "🩸", name: "ผ้าอนามัย(เผื่อเป็นประจำเดือน)", done: false },
+      { id: 17, emoji: "🧥", name: "เสื้อกันฝนแบบบาง", done: false },
+      { id: 18, emoji: "☂️", name: "ร่ม", done: false },
+      { id: 19, emoji: "🧢", name: "หมวก", done: false },
+      { id: 20, emoji: "🕶️", name: "แว่นกันแดด", done: false },
+      { id: 21, emoji: "💄", name: "ลิปสติก", done: false },
+      { id: 22, emoji: "🎁", name: "ของแจก/ของแลก (Giveaway)", done: false },
+      { id: 23, emoji: "🃏", name: "Photocard", done: false }
+    ];
+
+    let state = {
+      title: SHEET_TITLE,
+      filter: "all",
+      items: []
+    };
+
+    function createHanbokEffects() {
+      const stage = document.getElementById("hanbokStage");
+      for (let i = 0; i < 14; i++) {
+        const petal = document.createElement("span");
+        petal.className = "petal";
+        const size = 8 + Math.random() * 8;
+        petal.style.width = `${size}px`;
+        petal.style.height = `${size * 0.72}px`;
+        petal.style.left = `${Math.random() * 100}%`;
+        petal.style.animationDuration = `${8 + Math.random() * 9}s`;
+        petal.style.animationDelay = `${-Math.random() * 11}s`;
+        stage.appendChild(petal);
+      }
+      for (let i = 0; i < 18; i++) {
+        const sp = document.createElement("span");
+        sp.className = "sparkle";
+        sp.style.left = `${Math.random() * 100}%`;
+        sp.style.top = `${Math.random() * 100}%`;
+        sp.style.animationDelay = `${Math.random() * 3.5}s`;
+        stage.appendChild(sp);
+      }
+    }
+
+    function pickEmoji(text) {
+      if (/บัตร|ตั๋ว/.test(text)) return "🎫";
+      if (/เงิน|ตัง|เป๋า/.test(text)) return "💳";
+      if (/แท่งไฟ|มี่บอม/.test(text)) return "💜";
+      if (/ถ่าน/.test(text)) return "🔋";
+      if (/แบต|พาวเวอร์|สายชาร์จ/.test(text)) return "🔌";
+      if (/ชุด|เสื้อ|กางเกง|กระโปรง|รองเท้า/.test(text)) return "👗";
+      if (/ยา|พลาสเตอร์|สเปรย์/.test(text)) return "💊";
+      if (/พัด/.test(text)) return "🪭";
+      if (/การ์ด|card|รูป/.test(text)) return "🃏";
+      if (/แจก|แลก|ของขวัญ/.test(text)) return "🎁";
+      if (/ลิป|แป้ง|แต่งหน้า|ครีม/.test(text)) return "💄";
+      return "✨";
+    }
+
+    async function saveAsImage() {
+      if (typeof html2canvas === "undefined") {
+        showToast("ตัวบันทึกรูปกำลังโหลด ลองกดอีกครั้งนะ");
+        return;
+      }
+      showToast("📸 กำลังสร้างรูปภาพเช็กลิสต์...");
+      const target = document.getElementById("captureTarget");
+
+      try {
+        const canvas = await html2canvas(target, {
+          backgroundColor: "#090204",
+          scale: Math.max(2, window.devicePixelRatio || 1),
+          useCORS: true,
+          logging: false
+        });
+        const link = document.createElement("a");
+        link.download = `BTS-Arirang-Checklist-${Date.now()}.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+        showToast("✅ บันทึกรูป PNG เรียบร้อย!");
+      } catch {
+        showToast("บันทึกรูปไม่สำเร็จ ลองแคปหน้าจอแทนได้เลยนะ");
+      }
+    }
+
+    function loadState() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          state.title = parsed.title || SHEET_TITLE;
+          state.items = Array.isArray(parsed.items) && parsed.items.length > 0
+            ? parsed.items
+            : JSON.parse(JSON.stringify(SHEET_ITEMS));
+        } catch {
+          state.items = JSON.parse(JSON.stringify(SHEET_ITEMS));
+        }
+      } else {
+        state.items = JSON.parse(JSON.stringify(SHEET_ITEMS));
+      }
+      render();
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        title: state.title,
+        items: state.items
+      }));
+    }
+
+    function addItem() {
+      const input = document.getElementById("itemInput");
+      const text = input.value.trim();
+      if (!text) {
+        showToast("พิมพ์ชื่อสิ่งของก่อนนะ ✨");
+        input.focus();
+        return;
+      }
+      state.items.push({
+        id: Date.now() + Math.random(),
+        emoji: pickEmoji(text),
+        name: text,
+        done: false
+      });
+      input.value = "";
+      saveState();
+      render();
+      showToast("เพิ่มรายการเรียบร้อย 💜");
+    }
+
+    function toggleItem(id) {
+      const target = state.items.find(i => i.id === id);
+      if (!target) return;
+      target.done = !target.done;
+      saveState();
+      render();
+    }
+
+    function deleteItem(event, id) {
+      event.stopPropagation();
+      state.items = state.items.filter(i => i.id !== id);
+      saveState();
+      render();
+      showToast("ลบรายการแล้ว");
+    }
+
+    function setFilter(filterName, btnEl) {
+      state.filter = filterName;
+      document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      if (btnEl) btnEl.classList.add("active");
+      render();
+    }
+
+    function resetToSheetDefault() {
+      state.items = JSON.parse(JSON.stringify(SHEET_ITEMS));
+      state.filter = "all";
+      document.querySelectorAll(".filter-btn").forEach((b, idx) => {
+        b.classList.toggle("active", idx === 0);
+      });
+      saveState();
+      render();
+      showToast("🔄 รีเซ็ตกลับเป็นรายการตั้งต้น 23 ข้อแล้ว");
+    }
+
+    function copyList() {
+      if (state.items.length === 0) {
+        showToast("ยังไม่มีรายการให้คัดลอก");
+        return;
+      }
+      const lines = state.items.map(i => `${i.done ? "☑" : "☐"} ${i.emoji || "•"} ${i.name} (${i.done ? "เอาไปแล้ว" : "ยังไม่ได้เอาไป"})`);
+      const output = `🪭 ${state.title}\n` + lines.join("\n");
+      navigator.clipboard.writeText(output)
+        .then(() => showToast("📋 คัดลอกลิสต์ไปวางต่อได้เลย!"))
+        .catch(() => showToast("คัดลอกไม่สำเร็จ ลองอีกครั้งนะ"));
+    }
+
+    function render() {
+      document.getElementById("boardTitle").textContent = state.title;
+      const listEl = document.getElementById("checklist");
+      const filtered = state.items.filter(item => {
+        if (state.filter === "pending") return !item.done;
+        if (state.filter === "done") return item.done;
+        return true;
+      });
+
+      listEl.innerHTML = "";
+      if (filtered.length === 0) {
+        listEl.innerHTML = `<div class="empty-state">ไม่มีรายการในหมวดนี้ ลองเพิ่มของใหม่หรือเปลี่ยนตัวกรองดูนะ 🪭</div>`;
+      } else {
+        filtered.forEach(item => {
+          const li = document.createElement("li");
+          li.className = "item-card" + (item.done ? " done" : "");
+          li.onclick = () => toggleItem(item.id);
+          li.innerHTML = `
+            <div class="item-left">
+              <div class="check-box">
+                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div>
+              <span class="item-emoji">${item.emoji || "✨"}</span>
+              <span class="item-title">${escapeHtml(item.name)}</span>
+            </div>
+            <div class="item-right">
+              <span class="badge-status">${item.done ? "เอาไปแล้ว ✓" : "ยังไม่ได้เอาไป"}</span>
+              <button class="del-btn" title="ลบรายการ" onclick="deleteItem(event, ${item.id})">✕</button>
+            </div>
+          `;
+          listEl.appendChild(li);
+        });
+      }
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const total = state.items.length;
+      const doneCount = state.items.filter(i => i.done).length;
+      const pct = total === 0 ? 0 : Math.round((doneCount / total) * 100);
+      document.getElementById("progressStat").textContent = `${doneCount} / ${total} (${pct}%)`;
+      document.getElementById("progressFill").style.width = `${pct}%`;
+      const readyBanner = document.getElementById("readyBanner");
+      if (total > 0 && doneCount === total) readyBanner.classList.add("show");
+      else readyBanner.classList.remove("show");
+    }
+
+    let toastTimer;
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      toast.textContent = msg;
+      toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove("show"), 2200);
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement("div");
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    createHanbokEffects();
+    loadState();
+  </script>
+</body>
+</html>
