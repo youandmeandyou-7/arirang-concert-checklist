@@ -38,7 +38,6 @@
       position: relative;
     }
 
-    /* พื้นหลังเคลื่อนไหวสไตล์ฮันบก & โคมไฟเกาหลี */
     .hanbok-stage {
       position: fixed;
       inset: 0;
@@ -155,7 +154,6 @@
       50% { opacity: 0.95; transform: scale(1.35); }
     }
 
-    /* กล่องหลัก: มือถือเป็นแนวตั้ง คอมเป็นแนวนอนเต็มจอ */
     .app-shell {
       position: relative;
       z-index: 2;
@@ -217,7 +215,6 @@
       50% { transform: rotate(-1deg); }
     }
 
-    /* เมนูแยกอิสระ: Checklist และ โปรเจค */
     .main-nav {
       position: relative;
       z-index: 3;
@@ -400,7 +397,6 @@
 
     .ready-banner.show { display: flex; }
 
-    /* กล่องนับถอยหลังสรุป 3 วัน */
     .countdown-strip {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -428,7 +424,6 @@
       line-height: 1.25;
     }
 
-    /* แถบตัวกรองแอคเคาท์ใน X และปุ่มสลับการจัดกลุ่ม */
     .project-subbar {
       display: flex;
       flex-direction: column;
@@ -746,7 +741,6 @@
       background: rgba(255, 36, 68, 0.16);
     }
 
-    /* พื้นที่แสดงรายการโปรเจค + กลุ่มตามแอคเคาท์ (โหมดอ่านอย่างเดียว) */
     .project-feed {
       display: flex;
       flex-direction: column;
@@ -821,7 +815,6 @@
       gap: 8px;
     }
 
-    /* ป้ายวันที่ + เวลานับถอยหลังแยกตามแต่ละวัน */
     .per-day-countdowns {
       display: flex;
       flex-wrap: wrap;
@@ -846,7 +839,6 @@
       font-weight: 700;
     }
 
-    /* แกลเลอรีรูปภาพในการ์ดโปรเจค */
     .project-gallery {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -978,7 +970,6 @@
       font-size: 13.5px;
     }
 
-    /* Lightbox สำหรับคลิกขยายดูรูปโปรเจค + เลื่อนดูรูปถัดไป/ก่อนหน้า + บันทึกรูป */
     .lightbox-modal {
       position: fixed;
       inset: 0;
@@ -1122,7 +1113,6 @@
       opacity: 0.65;
     }
 
-    /* โหมดแนวนอนเต็มหน้าจอสำหรับหน้าจอคอมพิวเตอร์ */
     @media (min-width: 900px) {
       body {
         padding: 24px 28px;
@@ -1175,7 +1165,6 @@
   <main class="app-shell" id="captureTarget">
     <div class="goreum-ribbon"></div>
 
-    <!-- พัดจีนมุมบนขวา -->
     <svg class="fan-wrap" viewBox="0 0 220 220" aria-hidden="true">
       <defs>
         <linearGradient id="silkRed" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -1201,7 +1190,6 @@
       <circle cx="115" cy="162" r="7" fill="#f5c973" stroke="#57050f" stroke-width="2"/>
     </svg>
 
-    <!-- เมนูแยกอิสระ: Checklist และ โปรเจค -->
     <nav class="main-nav" data-html2canvas-ignore="true" aria-label="เมนูหลัก">
       <button class="nav-tab active" id="navChecklist" onclick="switchTab('checklist')">
         <span>✅</span>
@@ -1264,7 +1252,7 @@
       </div>
     </section>
 
-    <!-- ==================== เมนู โปรเจค (โหมดอ่านอย่างเดียว) ==================== -->
+    <!-- ==================== เมนู โปรเจค (โหมดอ่านอย่างเดียว + ข้อมูลฝังในโค้ด) ==================== -->
     <section class="tab-panel" id="panelProject">
       <div class="content-grid">
         <div class="side-panel">
@@ -1281,7 +1269,6 @@
 
           <div class="countdown-strip" id="countdownStrip"></div>
 
-          <!-- แถบกรอง & จัดกลุ่มตามแอคเคาท์ -->
           <div class="project-subbar" data-html2canvas-ignore="true">
             <div class="project-subbar-top">
               <span class="subbar-caption">𝕏 กรอง & จัดกลุ่มตามแอคเคาท์</span>
@@ -1317,7 +1304,6 @@
     </svg>
   </main>
 
-  <!-- Modal ขยายดูรูปภาพขนาดเต็ม + เลื่อนดูรูปในโปรเจค + บันทึกรูป -->
   <div class="lightbox-modal" id="lightboxModal" onclick="closeLightbox()">
     <div class="lightbox-content" onclick="event.stopPropagation()">
       <button type="button" class="lightbox-close" onclick="closeLightbox()" title="ปิด">✕</button>
@@ -1336,8 +1322,45 @@
   <div class="toast" id="toast"></div>
 
   <script>
+    /* =========================================================================
+       📌 ฝังข้อมูลโปรเจคในโค้ดโดยตรง (แก้ตรงนี้แล้ว Push ขึ้น GitHub ได้เลย)
+       - dates: เลือกได้ 1 วันหรือหลายวันจาก ["3 ธันวาคม 2026", "5 ธันวาคม 2026", "6 ธันวาคม 2026"]
+       - xHandle: ใส่ "@ชื่อแอคเคาท์" หรือเว้นว่าง ""
+       - images: ใส่ลิงก์รูปภาพ ["https://.../img1.jpg", "./images/proj1.jpg"]
+       - note: รายละเอียดโปรเจค (ขึ้นบรรทัดใหม่ได้ด้วย \n)
+       ========================================================================= */
+    const EMBEDDED_PROJECTS = [
+      {
+        id: 301,
+        dates: ["3 ธันวาคม 2026"],
+        name: "โปรเจควันที่ 3 ธันวาคม 2026",
+        location: "ระบุสถานที่",
+        xHandle: "",
+        images: [],
+        note: "รอเพิ่มเติมรายละเอียด"
+      },
+      {
+        id: 302,
+        dates: ["5 ธันวาคม 2026"],
+        name: "โปรเจควันที่ 5 ธันวาคม 2026",
+        location: "ระบุสถานที่",
+        xHandle: "",
+        images: [],
+        note: "รอเพิ่มเติมรายละเอียด"
+      },
+      {
+        id: 303,
+        dates: ["6 ธันวาคม 2026"],
+        name: "โปรเจควันที่ 6 ธันวาคม 2026",
+        location: "ระบุสถานที่",
+        xHandle: "",
+        images: [],
+        note: "รอเพิ่มเติมรายละเอียด"
+      }
+    ];
+
     const STORAGE_KEY = "bts_arirang_checklist_v3";
-    const PROJECT_STORAGE_KEY = "bts_arirang_projects_countdown_v5";
+    const PROJECT_CACHE_KEY = "bts_arirang_projects_embedded_cache_v1";
     const SHEET_TITLE = "รายการที่ต้องเอาไปคอนBTS";
     const ALL_EVENT_DATES = ["3 ธันวาคม 2026", "5 ธันวาคม 2026", "6 ธันวาคม 2026"];
     const SHORT_DATE_MAP = {
@@ -1378,36 +1401,6 @@
       "6 ธันวาคม 2026": "2026-12-06"
     };
 
-    const DEFAULT_PROJECTS = [
-      {
-        id: 301,
-        dates: ["3 ธันวาคม 2026"],
-        name: "โปรเจควันที่ 3 ธันวาคม 2026",
-        location: "ระบุสถานที่",
-        xHandle: "",
-        images: [],
-        note: "รอเพิ่มเติมรายละเอียด"
-      },
-      {
-        id: 302,
-        dates: ["5 ธันวาคม 2026"],
-        name: "โปรเจควันที่ 5 ธันวาคม 2026",
-        location: "ระบุสถานที่",
-        xHandle: "",
-        images: [],
-        note: "รอเพิ่มเติมรายละเอียด"
-      },
-      {
-        id: 303,
-        dates: ["6 ธันวาคม 2026"],
-        name: "โปรเจควันที่ 6 ธันวาคม 2026",
-        location: "ระบุสถานที่",
-        xHandle: "",
-        images: [],
-        note: "รอเพิ่มเติมรายละเอียด"
-      }
-    ];
-
     let state = {
       activeTab: "checklist",
       title: SHEET_TITLE,
@@ -1433,7 +1426,7 @@
     function registerOfflineServiceWorker() {
       if (!("serviceWorker" in navigator) || !window.isSecureContext) return;
       const swCode = `
-        const CACHE_NAME = 'bts-arirang-offline-v1';
+        const CACHE_NAME = 'bts-arirang-offline-v2';
         self.addEventListener('install', (event) => {
           event.waitUntil(
             caches.open(CACHE_NAME).then((cache) => {
@@ -1455,7 +1448,7 @@
           event.respondWith(
             caches.match(event.request).then((cached) => {
               const networkFetch = fetch(event.request).then((res) => {
-                if (res && res.ok && event.request.url.startsWith(self.location.origin)) {
+                if (res && res.ok) {
                   const clone = res.clone();
                   caches.open(CACHE_NAME).then((c) => c.put(event.request, clone)).catch(() => {});
                 }
@@ -1573,11 +1566,12 @@
       const safeName = (proj.name || "project").replace(/[^a-zA-Z0-9ก-๙_-]/g, "_").slice(0, 30);
       link.download = `BTS-Project-${safeName}-${imgIndex + 1}.jpg`;
       link.href = proj.images[imgIndex];
+      link.target = "_blank";
+      link.rel = "noopener";
       link.click();
-      showToast(`💾 บันทึกรูปที่ ${imgIndex + 1} ลงเครื่องเรียบร้อย!`);
+      showToast(`💾 เปิด/บันทึกรูปที่ ${imgIndex + 1} เรียบร้อย!`);
     }
 
-    /* Lightbox ดูรูปใหญ่ + เลื่อนดูรูปก่อนหน้า/ถัดไป */
     function openLightbox(projectId, imgIndex = 0) {
       const proj = state.projects.find(p => p.id === projectId);
       if (!proj || !Array.isArray(proj.images) || proj.images.length === 0) return;
@@ -1675,6 +1669,34 @@
       };
     }
 
+    function loadProjectsData() {
+      const normalizedEmbedded = Array.isArray(EMBEDDED_PROJECTS)
+        ? EMBEDDED_PROJECTS.map(normalizeProjectData)
+        : [];
+
+      if (normalizedEmbedded.length > 0) {
+        try {
+          localStorage.setItem(PROJECT_CACHE_KEY, JSON.stringify(normalizedEmbedded));
+        } catch {
+          // ข้ามกรณี quota เต็ม
+        }
+        return normalizedEmbedded;
+      }
+
+      const cached = localStorage.getItem(PROJECT_CACHE_KEY);
+      if (cached) {
+        try {
+          const parsed = JSON.parse(cached);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            return parsed.map(normalizeProjectData);
+          }
+        } catch {
+          // ใช้ค่าเริ่มต้น
+        }
+      }
+      return [];
+    }
+
     function loadState() {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
@@ -1691,24 +1713,7 @@
         state.items = JSON.parse(JSON.stringify(SHEET_ITEMS));
       }
 
-      const savedProj =
-        localStorage.getItem(PROJECT_STORAGE_KEY) ||
-        localStorage.getItem("bts_arirang_projects_countdown_v4") ||
-        localStorage.getItem("bts_arirang_projects_countdown_v3") ||
-        localStorage.getItem("bts_arirang_projects_countdown_v2");
-
-      if (savedProj) {
-        try {
-          const parsedProj = JSON.parse(savedProj);
-          state.projects = Array.isArray(parsedProj) && parsedProj.length > 0
-            ? parsedProj.map(normalizeProjectData)
-            : JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
-        } catch {
-          state.projects = JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
-        }
-      } else {
-        state.projects = JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
-      }
+      state.projects = loadProjectsData();
 
       render();
       renderCountdownStrip();
@@ -1835,7 +1840,6 @@
       else readyBanner.classList.remove("show");
     }
 
-    /* ==================== ฟังก์ชันดูโปรเจค (โหมดอ่านอย่างเดียว) ==================== */
     function setProjectFilter(filterName, btnEl) {
       state.projectFilter = filterName;
       document.querySelectorAll("[data-pfilter]").forEach(b => b.classList.remove("active"));
